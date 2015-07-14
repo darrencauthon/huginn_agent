@@ -7,9 +7,11 @@ class ::Agent
 end
 
 class FirstTest < HuginnAgent
+  def self.description; 'a'; end
 end
 
 class SecondTest < HuginnAgent
+  def self.description; 'b'; end
 end
 
 describe HuginnAgent do
@@ -44,6 +46,19 @@ describe HuginnAgent do
 
       end
 
+    end
+
+  end
+
+  describe "description" do
+
+    it "should default to nil" do
+      HuginnAgent.description.nil?.must_equal true
+    end
+
+    it "should have each agent create their own description" do
+      FirstTest.description.must_equal 'a'
+      SecondTest.description.must_equal 'b'
     end
 
   end
