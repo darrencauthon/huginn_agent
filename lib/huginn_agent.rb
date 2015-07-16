@@ -28,4 +28,22 @@ class HuginnAgent
     end
   end
 
+  def self.hack_huginn_to_accept_me
+
+    Agent.instance_eval do
+
+      alias :default_types :types
+
+      def types
+        default_types + HuginnAgent.agent_types
+      end
+
+      def valid_type?(type)
+        types.include? type.constantize
+      end
+
+    end
+
+  end
+
 end
