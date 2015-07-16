@@ -35,7 +35,8 @@ class HuginnAgent
       alias :default_types :types
 
       def types
-        default_types + HuginnAgent.agent_types
+        (default_types + HuginnAgent.agent_types)
+          .sort_by { |x| x.to_s }
       end
 
       def valid_type?(type)
