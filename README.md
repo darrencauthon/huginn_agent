@@ -4,23 +4,57 @@ TODO: Write a gem description
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your Huginn Gemfile:
 
 ```ruby
 gem 'huginn_agent'
 ```
 
-And then execute:
+Then create an initializer at ```config/huginn_agent.rb```, with the following code:
 
-    $ bundle
+## Sample code
 
-Or install it yourself as:
+```ruby
+require 'huginn_agent'
 
-    $ gem install huginn_agent
+HuginnAgent.hack_huginn_to_accept_me
+```
+
+## Sample agent
+
+
+
+Happy.emit
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Create a HuginnAgent like so:
+
+```ruby
+require 'huginn_agent'
+
+HuginnAgent.hack_huginn_to_accept_me
+
+class Happy < HuginnAgent
+  def self.description
+<<STUFF
+#Happy
+
+This is a test agent.
+STUFF
+  end
+end
+```
+
+This code can be in a separate gem.
+
+Then in your huginn initializer, add:
+
+```ruby
+Happy.emit
+```
+
 
 ## Contributing
 
