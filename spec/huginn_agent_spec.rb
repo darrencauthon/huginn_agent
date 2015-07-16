@@ -1,9 +1,16 @@
 require_relative 'spec_helper'
 
-class ::Agent
-  def self.exist?
-    'ok'
+class Class
+  def description value
+    the_class = class << self; self; end
+    the_value = value
+    the_class.send(:define_method, :the_description) do
+      the_value
+    end
   end
+end
+
+class ::Agent
 end
 
 class FirstTest < HuginnAgent
@@ -42,6 +49,12 @@ describe HuginnAgent do
         it "should create each agent with an Agent base class" do
           test[:type].emit
           eval(test[:agent].to_s).new.is_a?(Agent).must_equal true
+        end
+
+        it "should set the agent description" do
+          test[:type].emit
+          eval(test[:agent].to_s)
+            .the_description.must_equal test[:type].description
         end
 
       end
