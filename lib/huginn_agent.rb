@@ -23,6 +23,9 @@ class HuginnAgent
     {}
   end
 
+  def validate_options _
+  end
+
   def self.emit
     eval "class ::#{self.to_s}Agent < Agent; def my_source; #{self}; end; end"
 

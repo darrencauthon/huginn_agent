@@ -99,4 +99,12 @@ describe HuginnAgent do
     end
   end
 
+  describe "validate_options "do
+
+    it "should have a base validate_options method" do
+      HuginnAgent.new.validate_options nil
+    end
+
+  end
+
 end
