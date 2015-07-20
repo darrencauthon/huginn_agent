@@ -19,7 +19,7 @@ class HuginnAgent
   def self.description
   end
 
-  def self.default_options
+  def default_options
     {}
   end
 
@@ -27,7 +27,7 @@ class HuginnAgent
   end
 
   def self.emit
-    eval "class ::#{self.to_s}Agent < Agent; def initialize; @base_agent = #{self}.new; end; def my_source; #{self}; end; end"
+    eval "class ::#{self.to_s}Agent < Agent; def initialize; @base_agent = #{self}.new; end; end"
 
     the_description = self.description
     "#{self.to_s}Agent".constantize.class_eval do
@@ -36,7 +36,7 @@ class HuginnAgent
 
     "#{self.to_s}Agent".constantize.class_eval do
       def default_options
-        my_source.default_options
+        @base_agent.default_options
       end
     end
 
