@@ -102,7 +102,18 @@ describe HuginnAgent do
   describe "validate_options "do
 
     it "should have a base validate_options method" do
-      HuginnAgent.new.validate_options nil
+      HuginnAgent.new.validate_options
+    end
+
+    it "should pass the errors from the base class" do
+      expected_result = Object.new
+      first_test      = Struct.new(:validate_options).new expected_result
+
+      FirstTest.stubs(:new).returns first_test
+      FirstTest.emit
+
+      result = FirstTestAgent.new.validate_options
+      result.must_be_same_as expected_result
     end
 
   end
