@@ -19,6 +19,10 @@ class HuginnAgent
   def self.description
   end
 
+  def self.default_options
+    {}
+  end
+
   def self.emit
     eval "class ::#{self.to_s}Agent < Agent; end"
 

@@ -76,4 +76,11 @@ describe HuginnAgent do
 
   end
 
+  describe "default_options" do
+    it "should default to an empty hash" do
+      HuginnAgent.default_options.count.must_equal 0
+      HuginnAgent.default_options.is_a?(Hash).must_equal true
+    end
+  end
+
 end
