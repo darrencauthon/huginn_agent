@@ -15,10 +15,18 @@ end
 
 class FirstTest < HuginnAgent
   def self.description; 'a'; end
+
+  def self.default_options
+    @default_options ||= Object.new
+  end
 end
 
 class SecondTest < HuginnAgent
   def self.description; 'b'; end
+
+  def self.default_options
+    @default_options ||= Object.new
+  end
 end
 
 describe HuginnAgent do
@@ -74,6 +82,21 @@ describe HuginnAgent do
       SecondTest.description.must_equal 'b'
     end
 
+  end
+
+  describe "default_options" do
+    it "should default to an empty hash" do
+      HuginnAgent.default_options.count.must_equal 0
+      HuginnAgent.default_options.is_a?(Hash).must_equal true
+    end
+
+    it "should default the agents to return their specific default options" do
+      FirstTest.emit
+      FirstTestAgent.new.default_options.must_be_same_as FirstTest.default_options
+
+      SecondTest.emit
+      SecondTestAgent.new.default_options.must_be_same_as SecondTest.default_options
+    end
   end
 
 end
