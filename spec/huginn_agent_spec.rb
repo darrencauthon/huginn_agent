@@ -238,4 +238,14 @@ describe HuginnAgent do
     end
   end
 
+  describe "working?" do
+    it "should bind up working?" do
+      FirstTest.emit
+      agent = FirstTestAgent.new
+      expected_result = Object.new
+      agent.base_agent.stubs(:working?).returns expected_result
+      agent.working?.must_be_same_as expected_result
+    end
+  end
+
 end

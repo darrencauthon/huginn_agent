@@ -71,6 +71,12 @@ class HuginnAgent
     end
 
     "#{self.to_s}Agent".constantize.class_eval do
+      def working?
+        base_agent.working?
+      end
+    end
+
+    "#{self.to_s}Agent".constantize.class_eval do
       def default_options
         base_agent.default_options
       end
