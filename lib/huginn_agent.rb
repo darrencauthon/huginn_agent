@@ -3,6 +3,8 @@ require "huginn_agent/version"
 
 class HuginnAgent
 
+  attr_accessor :parent_agent
+
   def self.inherited type
     @types ||= []
     @types << type
@@ -23,11 +25,15 @@ class HuginnAgent
     {}
   end
 
+  def options
+    parent_agent.options
+  end
+
   def validate_options
   end
 
   def self.emit
-    eval "class ::#{self.to_s}Agent < Agent; def base_agent; @base_agent ||= #{self}.new; end; end"
+    eval "class ::#{self.to_s}Agent < Agent; def base_agent; @base_agent ||= #{self}.new.tap { |a| a.parent_agent = self}; end; end"
 
     the_description = self.description
     "#{self.to_s}Agent".constantize.class_eval do

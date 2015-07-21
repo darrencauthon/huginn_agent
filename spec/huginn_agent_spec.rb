@@ -92,7 +92,7 @@ describe HuginnAgent do
 
     it "should default the agents to return their specific default options" do
       expected_result = Object.new
-      first_test      = Struct.new(:default_options).new expected_result
+      first_test      = Struct.new(:default_options, :parent_agent).new expected_result, nil
 
       FirstTest.stubs(:new).returns first_test
       FirstTest.emit
@@ -108,7 +108,7 @@ describe HuginnAgent do
 
     it "should pass the errors from the base class" do
       expected_result = Object.new
-      first_test      = Struct.new(:validate_options).new expected_result
+      first_test      = Struct.new(:validate_options, :parent_agent).new expected_result, nil
 
       FirstTest.stubs(:new).returns first_test
       FirstTest.emit
@@ -117,6 +117,18 @@ describe HuginnAgent do
       result.must_be_same_as expected_result
     end
 
+  end
+
+  describe "options" do
+
+    it "should be bound to the actual agent in use" do
+      FirstTest.emit
+      options = Object.new
+      first_test = FirstTestAgent.new
+      first_test.stubs(:options).returns options
+
+      first_test.base_agent.options.must_be_same_as options
+    end
   end
 
 end
