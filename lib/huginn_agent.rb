@@ -21,6 +21,9 @@ class HuginnAgent
   def self.description
   end
 
+  def self.event_description
+  end
+
   def default_options
     {}
   end
@@ -46,6 +49,11 @@ class HuginnAgent
     the_description = self.description
     "#{self.to_s}Agent".constantize.class_eval do
       description the_description
+    end
+
+    the_event_description = self.event_description
+    "#{self.to_s}Agent".constantize.class_eval do
+      event_description the_event_description
     end
 
     if self.new.respond_to?(:check)

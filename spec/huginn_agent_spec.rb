@@ -21,6 +21,15 @@ class Class
       the_value
     end
   end
+
+  def event_description value
+    the_class = class << self; self; end
+    the_value = value
+    the_class.send(:define_method, :the_event_description) do
+      the_value
+    end
+  end
+
 end
 
 class ::Agent
@@ -29,6 +38,8 @@ end
 class FirstTest < HuginnAgent
   def self.description; 'a'; end
 
+  def self.event_description; 't'; end
+
   def default_options
     @default_options ||= Object.new
   end
@@ -36,6 +47,8 @@ end
 
 class SecondTest < HuginnAgent
   def self.description; 'b'; end
+
+  def self.event_description; 'u'; end
 
   def default_options
     @default_options ||= Object.new
@@ -209,6 +222,20 @@ describe HuginnAgent do
       result.must_be_same_as expected_result
     end
 
+  end
+
+  describe "event description" do
+
+    it "should default to nothing" do
+      HuginnAgent.event_description.nil?.must_equal true
+    end
+
+    it "should bind up the event description" do
+      FirstTest.emit
+      FirstTestAgent.the_event_description.must_equal FirstTest.event_description
+      SecondTest.emit
+      SecondTestAgent.the_event_description.must_equal SecondTest.event_description
+    end
   end
 
 end
