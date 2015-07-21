@@ -121,14 +121,18 @@ describe HuginnAgent do
 
   describe "options" do
 
-    it "should be bound to the actual agent in use" do
-      FirstTest.emit
-      options = Object.new
-      first_test = FirstTestAgent.new
-      first_test.stubs(:options).returns options
+    let(:options)    { Object.new }
+    let(:first_test) { FirstTestAgent.new }
 
+    before do
+      FirstTest.emit
+      first_test.stubs(:options).returns options
+    end
+
+    it "should be bound to the actual agent in use" do
       first_test.base_agent.options.must_be_same_as options
     end
+
   end
 
 end
