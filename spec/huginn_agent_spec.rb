@@ -196,4 +196,19 @@ describe HuginnAgent do
     end
   end
 
+  describe "create_event" do
+
+    it "should bind the create_event method from the actual agent to the base agent" do
+      FirstTest.emit
+      expected_result = Object.new
+      data = Object.new
+      agent = FirstTestAgent.new
+
+      agent.stubs(:create_event).with(data).returns expected_result
+      result = agent.base_agent.create_event(data)
+      result.must_be_same_as expected_result
+    end
+
+  end
+
 end

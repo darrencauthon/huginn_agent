@@ -36,6 +36,10 @@ class HuginnAgent
   def validate_options
   end
 
+  def create_event data
+    parent_agent.create_event data
+  end
+
   def self.emit
     eval "class ::#{self.to_s}Agent < Agent; def base_agent; @base_agent ||= #{self}.new.tap { |a| a.parent_agent = self}; end; end"
 
