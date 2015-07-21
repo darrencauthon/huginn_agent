@@ -28,19 +28,7 @@ class HuginnAgent
     {}
   end
 
-  def options
-    parent_agent.options
-  end
-
-  def errors
-    parent_agent.errors
-  end
-
   def validate_options
-  end
-
-  def create_event data
-    parent_agent.create_event data
   end
 
   def method_missing(meth, *args, &blk)
