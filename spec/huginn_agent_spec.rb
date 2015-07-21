@@ -135,4 +135,20 @@ describe HuginnAgent do
 
   end
 
+  describe "errors" do
+
+    let(:errors)    { Object.new }
+    let(:first_test) { FirstTestAgent.new }
+
+    before do
+      FirstTest.emit
+      first_test.stubs(:errors).returns errors
+    end
+
+    it "should be bound to the actual agent in use" do
+      first_test.base_agent.errors.must_be_same_as errors
+    end
+
+  end
+
 end

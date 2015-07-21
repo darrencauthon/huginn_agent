@@ -29,6 +29,10 @@ class HuginnAgent
     parent_agent.options
   end
 
+  def errors
+    parent_agent.errors
+  end
+
   def validate_options
   end
 
