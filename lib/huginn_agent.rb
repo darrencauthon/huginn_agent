@@ -44,7 +44,11 @@ class HuginnAgent
       description the_description
     end
 
-    unless self.new.respond_to?(:check)
+    if self.new.respond_to?(:check)
+      "#{self.to_s}Agent".constantize.class_eval do
+        default_schedule 'every_1h'
+      end
+    else
       "#{self.to_s}Agent".constantize.class_eval do
         cannot_be_scheduled!
       end

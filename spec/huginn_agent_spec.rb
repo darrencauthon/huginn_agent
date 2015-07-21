@@ -13,6 +13,14 @@ class Class
     (class << self; self; end)
       .send(:define_method, :the_cannot_be_scheduled!) { true }
   end
+
+  def default_schedule value
+    the_class = class << self; self; end
+    the_value = value
+    the_class.send(:define_method, :the_default_schedule) do
+      the_value
+    end
+  end
 end
 
 class ::Agent
@@ -170,6 +178,12 @@ describe HuginnAgent do
       SecondTest.emit
       eval(SecondTestAgent.to_s)
         .respond_to?(:the_cannot_be_scheduled!).must_equal false
+    end
+
+    it "should have a default schedule of every hour" do
+      SecondTest.emit
+      eval(SecondTestAgent.to_s)
+        .the_default_schedule.must_equal 'every_1h'
     end
   end
 
