@@ -32,6 +32,9 @@ class SecondTest < HuginnAgent
   def default_options
     @default_options ||= Object.new
   end
+
+  def check
+  end
 end
 
 describe HuginnAgent do
@@ -161,6 +164,12 @@ describe HuginnAgent do
       FirstTest.emit
       eval(FirstTestAgent.to_s)
         .the_cannot_be_scheduled!.must_equal true
+    end
+
+    it "should NOT call cannot_be_scheduled! if a check method is defined" do
+      SecondTest.emit
+      eval(SecondTestAgent.to_s)
+        .respond_to?(:the_cannot_be_scheduled!).must_equal false
     end
   end
 
