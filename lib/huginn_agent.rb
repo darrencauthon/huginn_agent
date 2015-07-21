@@ -45,6 +45,10 @@ class HuginnAgent
     end
 
     "#{self.to_s}Agent".constantize.class_eval do
+      cannot_be_scheduled!
+    end
+
+    "#{self.to_s}Agent".constantize.class_eval do
       def default_options
         base_agent.default_options
       end

@@ -8,6 +8,11 @@ class Class
       the_value
     end
   end
+
+  def cannot_be_scheduled!
+    (class << self; self; end)
+      .send(:define_method, :the_cannot_be_scheduled!) { true }
+  end
 end
 
 class ::Agent
@@ -149,6 +154,14 @@ describe HuginnAgent do
       first_test.base_agent.errors.must_be_same_as errors
     end
 
+  end
+
+  describe "scheduling" do
+    it "should call cannot_be_scheduled! by default" do
+      FirstTest.emit
+      eval(FirstTestAgent.to_s)
+        .the_cannot_be_scheduled!.must_equal true
+    end
   end
 
 end
