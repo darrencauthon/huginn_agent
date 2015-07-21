@@ -185,6 +185,15 @@ describe HuginnAgent do
       eval(SecondTestAgent.to_s)
         .the_default_schedule.must_equal 'every_1h'
     end
+
+    it "should bind the check method" do
+      SecondTest.emit
+      expected_result = Object.new
+      base_agent = Struct.new(:check).new expected_result
+      agent = SecondTestAgent.new
+      agent.stubs(:base_agent).returns base_agent
+      agent.check.must_be_same_as expected_result
+    end
   end
 
 end

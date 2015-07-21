@@ -47,6 +47,10 @@ class HuginnAgent
     if self.new.respond_to?(:check)
       "#{self.to_s}Agent".constantize.class_eval do
         default_schedule 'every_1h'
+
+        def check
+          base_agent.check
+        end
       end
     else
       "#{self.to_s}Agent".constantize.class_eval do
