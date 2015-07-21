@@ -239,6 +239,13 @@ describe HuginnAgent do
   end
 
   describe "working?" do
+
+    it "should default working? to true" do
+      FirstTest.emit
+      agent = FirstTestAgent.new
+      agent.working?.must_equal true
+    end
+
     it "should bind up working?" do
       FirstTest.emit
       agent = FirstTestAgent.new
@@ -246,6 +253,7 @@ describe HuginnAgent do
       agent.base_agent.stubs(:working?).returns expected_result
       agent.working?.must_be_same_as expected_result
     end
+
   end
 
   describe "all of the methods on the base agent that I do not want to bind up manually" do

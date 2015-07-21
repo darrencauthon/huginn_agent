@@ -28,6 +28,10 @@ class HuginnAgent
     {}
   end
 
+  def working?
+    true
+  end
+
   def validate_options
   end
 
