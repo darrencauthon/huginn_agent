@@ -43,6 +43,10 @@ class HuginnAgent
     parent_agent.create_event data
   end
 
+  def method_missing(meth, *args, &blk)
+    parent_agent.send(meth, *args, &blk)
+  end
+
   def self.emit
     eval "class ::#{self.to_s}Agent < Agent; def base_agent; @base_agent ||= #{self}.new.tap { |a| a.parent_agent = self}; end; end"
 

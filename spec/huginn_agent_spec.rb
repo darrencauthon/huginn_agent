@@ -248,4 +248,24 @@ describe HuginnAgent do
     end
   end
 
+  describe "all of the methods on the base agent that I do not want to bind up manually" do
+    it "should all of the undefined methods to the parent agent" do
+      FirstTest.emit
+      agent = FirstTestAgent.new
+
+      expected_result = Object.new
+
+      method = :abc
+      input1 = Object.new
+      input2 = Object.new
+      input3 = Object.new
+
+      agent.stubs(method).with(input1, input2, input3).returns expected_result
+
+      result = agent.base_agent.send(method, input1, input2, input3)
+
+      result.must_be_same_as expected_result
+    end
+  end
+
 end
