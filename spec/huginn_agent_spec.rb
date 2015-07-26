@@ -14,6 +14,11 @@ class Class
       .send(:define_method, :the_cannot_be_scheduled!) { true }
   end
 
+  def cannot_receive_events!
+    (class << self; self; end)
+      .send(:define_method, :the_cannot_receive_events!) { true }
+  end
+
   def default_schedule value
     the_class = class << self; self; end
     the_value = value
@@ -273,6 +278,14 @@ describe HuginnAgent do
       result = agent.base_agent.send(method, input1, input2, input3)
 
       result.must_be_same_as expected_result
+    end
+  end
+
+  describe "receiving events" do
+    it "should call cannot_receive_events! by default" do
+      FirstTest.emit
+      eval(FirstTestAgent.to_s)
+        .the_cannot_receive_events!.must_equal true
     end
   end
 
