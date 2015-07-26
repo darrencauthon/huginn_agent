@@ -22,7 +22,9 @@ class HuginnAgent
       set_the_default_options
       set_the_validation
 
-      huginn_agent.class_eval { cannot_receive_events! }
+      unless agent.new.respond_to?(:receive)
+        huginn_agent.class_eval { cannot_receive_events! }
+      end
     end
 
     private

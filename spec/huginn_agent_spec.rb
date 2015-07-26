@@ -63,6 +63,13 @@ class SecondTest < HuginnAgent
   end
 end
 
+class ThirdTest < HuginnAgent
+  def self.description; 'c'; end
+
+  def receive
+  end
+end
+
 describe HuginnAgent do
 
   it "should be a class" do
@@ -74,6 +81,7 @@ describe HuginnAgent do
     after do
       Object.send(:remove_const, :FirstTestAgent) if Object.constants.include?(:FirstTestAgent)
       Object.send(:remove_const, :SecondTestAgent) if Object.constants.include?(:FirstTestAgent)
+      Object.send(:remove_const, :ThirdTestAgent) if Object.constants.include?(:FirstTestAgent)
     end
 
     [
@@ -282,11 +290,23 @@ describe HuginnAgent do
   end
 
   describe "receiving events" do
+
     it "should call cannot_receive_events! by default" do
       FirstTest.emit
       eval(FirstTestAgent.to_s)
         .the_cannot_receive_events!.must_equal true
     end
+
+    describe "when receive is declared" do
+
+      it "should not call cannot_receive_events" do
+        ThirdTest.emit
+        eval(ThirdTestAgent.to_s)
+          .respond_to?(:the_cannot_receive_events!).must_equal false
+      end
+
+    end
+
   end
 
 end
