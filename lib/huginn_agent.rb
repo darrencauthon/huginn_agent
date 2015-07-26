@@ -1,4 +1,5 @@
 require 'active_support/inflector'
+require "huginn_agent/emitter"
 require "huginn_agent/version"
 
 class HuginnAgent
@@ -40,49 +41,7 @@ class HuginnAgent
   end
 
   def self.emit
-    eval "class ::#{self.to_s}Agent < Agent; def base_agent; @base_agent ||= #{self}.new.tap { |a| a.parent_agent = self}; end; end"
-
-    the_description = self.description
-    "#{self.to_s}Agent".constantize.class_eval do
-      description the_description
-    end
-
-    the_event_description = self.event_description
-    "#{self.to_s}Agent".constantize.class_eval do
-      event_description the_event_description
-    end
-
-    if self.new.respond_to?(:check)
-      "#{self.to_s}Agent".constantize.class_eval do
-        default_schedule 'every_1h'
-
-        def check
-          base_agent.check
-        end
-      end
-    else
-      "#{self.to_s}Agent".constantize.class_eval do
-        cannot_be_scheduled!
-      end
-    end
-
-    "#{self.to_s}Agent".constantize.class_eval do
-      def working?
-        base_agent.working?
-      end
-    end
-
-    "#{self.to_s}Agent".constantize.class_eval do
-      def default_options
-        base_agent.default_options
-      end
-    end
-
-    "#{self.to_s}Agent".constantize.class_eval do
-      def validate_options
-        base_agent.validate_options
-      end
-    end
+    HuginnAgent::Emitter.emit self
   end
 
   def self.hack_huginn_to_accept_me
