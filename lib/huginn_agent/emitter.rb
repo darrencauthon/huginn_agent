@@ -9,7 +9,7 @@ class HuginnAgent
     end
 
     def emit
-      eval "class ::#{agent.to_s}Agent < Agent; def base_agent; @base_agent ||= #{agent}.new.tap { |a| a.parent_agent = self}; end; end"
+      declare_the_agent
 
       the_description = agent.description
       "#{agent.to_s}Agent".constantize.class_eval do
@@ -52,6 +52,12 @@ class HuginnAgent
           base_agent.validate_options
         end
       end
+    end
+
+    private
+
+    def declare_the_agent
+      eval "class ::#{agent.to_s}Agent < Agent; def base_agent; @base_agent ||= #{agent}.new.tap { |a| a.parent_agent = self}; end; end"
     end
 
   end
