@@ -21,19 +21,22 @@ class HuginnAgent
   def self.description
   end
 
+  def self.event_description
+  end
+
   def default_options
     {}
   end
 
-  def options
-    parent_agent.options
-  end
-
-  def errors
-    parent_agent.errors
+  def working?
+    true
   end
 
   def validate_options
+  end
+
+  def method_missing(meth, *args, &blk)
+    parent_agent.send(meth, *args, &blk)
   end
 
   def self.emit
@@ -42,6 +45,31 @@ class HuginnAgent
     the_description = self.description
     "#{self.to_s}Agent".constantize.class_eval do
       description the_description
+    end
+
+    the_event_description = self.event_description
+    "#{self.to_s}Agent".constantize.class_eval do
+      event_description the_event_description
+    end
+
+    if self.new.respond_to?(:check)
+      "#{self.to_s}Agent".constantize.class_eval do
+        default_schedule 'every_1h'
+
+        def check
+          base_agent.check
+        end
+      end
+    else
+      "#{self.to_s}Agent".constantize.class_eval do
+        cannot_be_scheduled!
+      end
+    end
+
+    "#{self.to_s}Agent".constantize.class_eval do
+      def working?
+        base_agent.working?
+      end
     end
 
     "#{self.to_s}Agent".constantize.class_eval do

@@ -8,6 +8,28 @@ class Class
       the_value
     end
   end
+
+  def cannot_be_scheduled!
+    (class << self; self; end)
+      .send(:define_method, :the_cannot_be_scheduled!) { true }
+  end
+
+  def default_schedule value
+    the_class = class << self; self; end
+    the_value = value
+    the_class.send(:define_method, :the_default_schedule) do
+      the_value
+    end
+  end
+
+  def event_description value
+    the_class = class << self; self; end
+    the_value = value
+    the_class.send(:define_method, :the_event_description) do
+      the_value
+    end
+  end
+
 end
 
 class ::Agent
@@ -15,6 +37,8 @@ end
 
 class FirstTest < HuginnAgent
   def self.description; 'a'; end
+
+  def self.event_description; 't'; end
 
   def default_options
     @default_options ||= Object.new
@@ -24,8 +48,13 @@ end
 class SecondTest < HuginnAgent
   def self.description; 'b'; end
 
+  def self.event_description; 'u'; end
+
   def default_options
     @default_options ||= Object.new
+  end
+
+  def check
   end
 end
 
@@ -149,6 +178,102 @@ describe HuginnAgent do
       first_test.base_agent.errors.must_be_same_as errors
     end
 
+  end
+
+  describe "scheduling" do
+    it "should call cannot_be_scheduled! by default" do
+      FirstTest.emit
+      eval(FirstTestAgent.to_s)
+        .the_cannot_be_scheduled!.must_equal true
+    end
+
+    it "should NOT call cannot_be_scheduled! if a check method is defined" do
+      SecondTest.emit
+      eval(SecondTestAgent.to_s)
+        .respond_to?(:the_cannot_be_scheduled!).must_equal false
+    end
+
+    it "should have a default schedule of every hour" do
+      SecondTest.emit
+      eval(SecondTestAgent.to_s)
+        .the_default_schedule.must_equal 'every_1h'
+    end
+
+    it "should bind the check method" do
+      SecondTest.emit
+      expected_result = Object.new
+      base_agent = Struct.new(:check).new expected_result
+      agent = SecondTestAgent.new
+      agent.stubs(:base_agent).returns base_agent
+      agent.check.must_be_same_as expected_result
+    end
+  end
+
+  describe "create_event" do
+
+    it "should bind the create_event method from the actual agent to the base agent" do
+      FirstTest.emit
+      expected_result = Object.new
+      data = Object.new
+      agent = FirstTestAgent.new
+
+      agent.stubs(:create_event).with(data).returns expected_result
+      result = agent.base_agent.create_event(data)
+      result.must_be_same_as expected_result
+    end
+
+  end
+
+  describe "event description" do
+
+    it "should default to nothing" do
+      HuginnAgent.event_description.nil?.must_equal true
+    end
+
+    it "should bind up the event description" do
+      FirstTest.emit
+      FirstTestAgent.the_event_description.must_equal FirstTest.event_description
+      SecondTest.emit
+      SecondTestAgent.the_event_description.must_equal SecondTest.event_description
+    end
+  end
+
+  describe "working?" do
+
+    it "should default working? to true" do
+      FirstTest.emit
+      agent = FirstTestAgent.new
+      agent.working?.must_equal true
+    end
+
+    it "should bind up working?" do
+      FirstTest.emit
+      agent = FirstTestAgent.new
+      expected_result = Object.new
+      agent.base_agent.stubs(:working?).returns expected_result
+      agent.working?.must_be_same_as expected_result
+    end
+
+  end
+
+  describe "all of the methods on the base agent that I do not want to bind up manually" do
+    it "should all of the undefined methods to the parent agent" do
+      FirstTest.emit
+      agent = FirstTestAgent.new
+
+      expected_result = Object.new
+
+      method = :abc
+      input1 = Object.new
+      input2 = Object.new
+      input3 = Object.new
+
+      agent.stubs(method).with(input1, input2, input3).returns expected_result
+
+      result = agent.base_agent.send(method, input1, input2, input3)
+
+      result.must_be_same_as expected_result
+    end
   end
 
 end
