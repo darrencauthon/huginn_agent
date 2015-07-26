@@ -26,7 +26,13 @@ class HuginnAgent
     private
 
     def declare_the_huginn_agent
-      eval "class ::#{agent.to_s}Agent < Agent; def base_agent; @base_agent ||= #{agent}.new.tap { |a| a.parent_agent = self}; end; end"
+      eval <<AGENT
+        class ::#{agent.to_s}Agent < Agent
+          def base_agent
+            @base_agent ||= #{agent}.new.tap { |a| a.parent_agent = self}
+          end
+        end
+AGENT
     end
 
     def set_the_agent_description
