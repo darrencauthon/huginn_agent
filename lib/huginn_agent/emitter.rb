@@ -17,38 +17,13 @@ class HuginnAgent
 
       set_the_agent_description
       set_the_event_description
+      set_the_scheduling
+      set_the_check
 
-      if agent.new.respond_to?(:check)
-        huginn_agent.class_eval do
-          default_schedule 'every_1h'
+      set_the_working
+      set_the_default_options
 
-          def check
-            base_agent.check
-          end
-        end
-      else
-        huginn_agent.class_eval do
-          cannot_be_scheduled!
-        end
-      end
-
-      huginn_agent.class_eval do
-        def working?
-          base_agent.working?
-        end
-      end
-
-      huginn_agent.class_eval do
-        def default_options
-          base_agent.default_options
-        end
-      end
-
-      huginn_agent.class_eval do
-        def validate_options
-          base_agent.validate_options
-        end
-      end
+      set_the_validation
     end
 
     private
@@ -65,6 +40,48 @@ class HuginnAgent
     def set_the_event_description
       description = agent.event_description
       huginn_agent.class_eval { event_description description }
+    end
+
+    def set_the_scheduling
+      if agent.new.respond_to?(:check)
+        huginn_agent.class_eval { default_schedule 'every_1h' }
+      else
+        huginn_agent.class_eval { cannot_be_scheduled! }
+      end
+    end
+
+    def set_the_check
+      if agent.new.respond_to?(:check)
+        huginn_agent.class_eval do
+          def check
+            base_agent.check
+          end
+        end
+      end
+    end
+
+    def set_the_working
+      huginn_agent.class_eval do
+        def working?
+          base_agent.working?
+        end
+      end
+    end
+
+    def set_the_default_options
+      huginn_agent.class_eval do
+        def default_options
+          base_agent.default_options
+        end
+      end
+    end
+
+    def set_the_validation
+      huginn_agent.class_eval do
+        def validate_options
+          base_agent.validate_options
+        end
+      end
     end
 
   end
