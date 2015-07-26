@@ -22,7 +22,7 @@ class HuginnAgent
       end
 
       def hack_huginn_to_accept_me
-        HuginnAgent::Hacker.hack_huginn_to_accept_me
+        HuginnAgent::Hacker.inject_these_agents_into_huginn
       end
       
     end
