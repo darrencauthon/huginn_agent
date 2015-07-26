@@ -15,15 +15,8 @@ class HuginnAgent
     def emit
       declare_the_huginn_agent
 
-      the_description = agent.description
-      huginn_agent.class_eval do
-        description the_description
-      end
-
-      the_event_description = agent.event_description
-      huginn_agent.class_eval do
-        event_description the_event_description
-      end
+      set_the_agent_description
+      set_the_event_description
 
       if agent.new.respond_to?(:check)
         huginn_agent.class_eval do
@@ -62,6 +55,16 @@ class HuginnAgent
 
     def declare_the_huginn_agent
       eval "class ::#{agent.to_s}Agent < Agent; def base_agent; @base_agent ||= #{agent}.new.tap { |a| a.parent_agent = self}; end; end"
+    end
+
+    def set_the_agent_description
+      description = agent.description
+      huginn_agent.class_eval { description description }
+    end
+
+    def set_the_event_description
+      description = agent.event_description
+      huginn_agent.class_eval { event_description description }
     end
 
   end
