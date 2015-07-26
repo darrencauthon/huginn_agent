@@ -14,15 +14,12 @@ class HuginnAgent
 
     def emit
       declare_the_huginn_agent
-
       set_the_agent_description
       set_the_event_description
       set_the_scheduling
       set_the_check
-
       set_the_working
       set_the_default_options
-
       set_the_validation
     end
 
