@@ -1,8 +1,14 @@
 class HuginnAgent
 
-  module Emitter
+  class Emitter
 
-    def self.emit agent
+    attr_reader :agent
+
+    def initialize agent
+      @agent = agent
+    end
+
+    def emit
       eval "class ::#{agent.to_s}Agent < Agent; def base_agent; @base_agent ||= #{agent}.new.tap { |a| a.parent_agent = self}; end; end"
 
       the_description = agent.description

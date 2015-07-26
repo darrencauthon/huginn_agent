@@ -41,7 +41,7 @@ class HuginnAgent
   end
 
   def self.emit
-    HuginnAgent::Emitter.emit self
+    HuginnAgent::Emitter.new(self).emit
   end
 
   def self.hack_huginn_to_accept_me
