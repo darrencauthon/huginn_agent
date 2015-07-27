@@ -14,6 +14,11 @@ class Class
       .send(:define_method, :the_cannot_be_scheduled!) { true }
   end
 
+  def cannot_receive_events!
+    (class << self; self; end)
+      .send(:define_method, :the_cannot_receive_events!) { true }
+  end
+
   def default_schedule value
     the_class = class << self; self; end
     the_value = value
@@ -58,6 +63,13 @@ class SecondTest < HuginnAgent
   end
 end
 
+class ThirdTest < HuginnAgent
+  def self.description; 'c'; end
+
+  def receive
+  end
+end
+
 describe HuginnAgent do
 
   it "should be a class" do
@@ -69,6 +81,7 @@ describe HuginnAgent do
     after do
       Object.send(:remove_const, :FirstTestAgent) if Object.constants.include?(:FirstTestAgent)
       Object.send(:remove_const, :SecondTestAgent) if Object.constants.include?(:FirstTestAgent)
+      Object.send(:remove_const, :ThirdTestAgent) if Object.constants.include?(:FirstTestAgent)
     end
 
     [
@@ -274,6 +287,35 @@ describe HuginnAgent do
 
       result.must_be_same_as expected_result
     end
+  end
+
+  describe "receiving events" do
+
+    it "should call cannot_receive_events! by default" do
+      FirstTest.emit
+      eval(FirstTestAgent.to_s)
+        .the_cannot_receive_events!.must_equal true
+    end
+
+    describe "when receive is declared" do
+
+      it "should not call cannot_receive_events" do
+        ThirdTest.emit
+        eval(ThirdTestAgent.to_s)
+          .respond_to?(:the_cannot_receive_events!).must_equal false
+      end
+
+      it "should bind the check method" do
+        ThirdTest.emit
+        expected_result, events = Object.new, Object.new
+        base_agent = Object.new.tap { |s| s.stubs(:receive).with(events).returns expected_result }
+        agent = ThirdTestAgent.new
+        agent.stubs(:base_agent).returns base_agent
+        agent.receive(events).must_be_same_as expected_result
+      end
+
+    end
+
   end
 
 end

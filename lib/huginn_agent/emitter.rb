@@ -21,6 +21,7 @@ class HuginnAgent
       set_the_working
       set_the_default_options
       set_the_validation
+      set_the_receiving_of_events
     end
 
     private
@@ -84,6 +85,18 @@ AGENT
         def validate_options
           base_agent.validate_options
         end
+      end
+    end
+
+    def set_the_receiving_of_events
+      if agent.new.respond_to?(:receive)
+        huginn_agent.class_eval do
+          def receive events
+            base_agent.receive events
+          end
+        end
+      else
+        huginn_agent.class_eval { cannot_receive_events! }
       end
     end
 
