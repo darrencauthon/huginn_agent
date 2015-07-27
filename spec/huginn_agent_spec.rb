@@ -305,6 +305,15 @@ describe HuginnAgent do
           .respond_to?(:the_cannot_receive_events!).must_equal false
       end
 
+      it "should bind the check method" do
+        ThirdTest.emit
+        expected_result, events = Object.new, Object.new
+        base_agent = Object.new.tap { |s| s.stubs(:receive).with(events).returns expected_result }
+        agent = ThirdTestAgent.new
+        agent.stubs(:base_agent).returns base_agent
+        agent.receive(events).must_be_same_as expected_result
+      end
+
     end
 
   end

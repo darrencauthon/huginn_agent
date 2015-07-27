@@ -24,6 +24,12 @@ class HuginnAgent
 
       unless agent.new.respond_to?(:receive)
         huginn_agent.class_eval { cannot_receive_events! }
+      else
+        huginn_agent.class_eval do
+          def receive events
+            base_agent.receive events
+          end
+        end
       end
     end
 
