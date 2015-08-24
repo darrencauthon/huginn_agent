@@ -1,60 +1,57 @@
 # HuginnAgent
 
-TODO: Write a gem description
+A base agent that you can use to create your own Huginn agents.
+
+These gems can be in their own separate gem, without any tie to Huginn.
+
+When you start your Huginn application with this gem installed, any
+```HuginnAgent``` classes you defined will be incorporated into
+your Huginn application automatically.
 
 ## Installation
 
-Add this line to your Huginn Gemfile:
+Add this line to your Huginn app's Gemfile:
 
 ```ruby
 gem 'huginn_agent'
 ```
 
-Then create an initializer at ```config/huginn_agent.rb```, with the following code:
+And then execute:
 
-## Sample code
+    $ bundle
 
-```ruby
-require 'huginn_agent'
-
-HuginnAgent.hack_huginn_to_accept_me
-```
-
-## Sample agent
-
-
-
-Happy.emit
-```
-
-## Usage
-
-Create a HuginnAgent like so:
+Now inside your Huginn app, create ```config/initializers/huginn_agent.rb``` with
+the following:
 
 ```ruby
 require 'huginn_agent'
-
 HuginnAgent.hack_huginn_to_accept_me
+HuginnAgent.types.each { |t| t.emit }
+```
 
+## Creating an agent
+
+Here's the simplest HuginnAgent:
+
+```ruby
 class Happy < HuginnAgent
-  def self.description
-<<STUFF
-#Happy
-
-This is a test agent.
-STUFF
-  end
 end
 ```
 
-This code can be in a separate gem.
+Now you will have an agent named ```HappyAgent``` in your list of
+available agents.
 
-Then in your huginn initializer, add:
+But what does it do?  We should add an agent description so others will know.
 
 ```ruby
-Happy.emit
-```
+class Happy < HuginnAgent
 
+  def self.description
+    'Make the world a happy place'
+  end
+
+end
+```
 
 ## Contributing
 
