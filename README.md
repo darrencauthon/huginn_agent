@@ -41,6 +41,8 @@ end
 Now you will have an agent named ```HappyAgent``` in your list of
 available agents.
 
+![images/01.png](images/01.png)
+
 But what does it do?  We should add an agent description so others will know.
 
 ```ruby
@@ -52,6 +54,14 @@ class Happy < HuginnAgent
 
 end
 ```
+
+![images/02.png](images/02.png)
+
+![images/03.png](images/03.png)
+
+That's good... but does our agent really make the world a better place? It looks like it does nothing to me.
+
+Let's make it do something.
 
 ## Contributing
 
