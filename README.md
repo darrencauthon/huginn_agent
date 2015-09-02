@@ -106,6 +106,57 @@ So I'll create the agent, name it "Smiles", and schedule it to run every minute.
 
 ![images/05.png](images/05.png)
 
+If this agent was tasked with things more complicated than basic happiness, I could put all sorts of custom logic in this method to look up stuff, parse results, and create fancier events.
+
+### Receiving Events
+
+So agents don't have to just create events, they can also receive them.  Let's go to the dark side and create a Sad Agent, which will watch out for those happy events and make them sad.
+
+Since this agent will be receiving events, we'll need to add a ```receive``` method with one ```events``` argument. 
+This method will be passed any events the agent is subscribed to.
+
+```ruby
+class Sad < HuginnAgent
+
+  def self.description
+    'Make the world an unhappy place'
+  end
+
+  def receive events
+  end
+
+end
+```
+
+![images/06.png](images/06.png)
+
+Let's create an agent that will receive the events from the "Smiles" Happy Agent we created, and turn them into sadness.
+
+```ruby
+class Sad < HuginnAgent
+
+  def self.description
+    'Make the world an unhappy place'
+  end
+
+  def receive events
+    events.each do |event|
+      if event.payload['blast']
+        event.payload['blast'].gsub! 'sunshine', 'darkness'
+        create_event payload: event.payload
+      end
+    end
+  end
+
+end
+```
+
+![images/07.png](images/07.png)
+
+Now whenever the "Smiles" agent fires an agent, the Sadness agent will pick it up and corrupt its positive message blast.
+
+![images/08.png](images/08.png)
+
 
 ## Contributing
 
