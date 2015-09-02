@@ -63,6 +63,50 @@ That's good... but does our agent really make the world a better place? It looks
 
 Let's make it do something.
 
+### Checking for Anything
+
+Let's start by adding a ```check``` method.  This method will be called whenever the agent is scheduled to run.
+
+```ruby
+class Happy < HuginnAgent
+
+  def self.description
+    'Make the world a happy place'
+  end
+
+  def check
+  end
+
+end
+```
+
+Adding this method opens the ability to schedule the agent. Whenever the agent is scheduled to run, the ```check``` method will be run.
+
+![images/04.png](images/04.png)
+
+### Creating Events
+
+Our ```HappyAgent``` can be scheduled, but it still doesn't do anything. Let's have it blast a ray of sunshine... in the form of an event.
+
+```ruby
+class Happy < HuginnAgent
+
+  def self.description
+    'Make the world a happy place'
+  end
+
+  def check
+    create_event payload: { blast: 'A ray of sunshine' }
+  end
+
+end
+```
+
+So I'll create the agent, name it "Smiles", and schedule it to run every minute. Look at it go!
+
+![images/05.png](images/05.png)
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/huginn_agent/fork )
