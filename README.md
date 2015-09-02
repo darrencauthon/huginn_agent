@@ -29,6 +29,7 @@ HuginnAgent.hack_huginn_to_accept_me
 HuginnAgent.types.each { |t| t.emit }
 ```
 
+
 ## Creating an agent
 
 Here's the simplest HuginnAgent:
@@ -38,8 +39,23 @@ class Happy < HuginnAgent
 end
 ```
 
-Now you will have an agent named ```HappyAgent``` in your list of
-available agents.
+When you inherit from ```HuginnAgent```, your agent will automatically be recognized.  You just have to get it into your web application, somehow. Here are a couple possibilities:
+
+  1) Put your agent in your gem.  Then add a link to your gem in your Huginn app's Gemfile.
+  2) Put the agent in your Huginn app. 
+
+*Note: Rails may not load the Ruby file unless it sees some sort of hard reference to the file. (go figure?) If your agent isn't loaded, try referencing it in your initializer: *
+
+```ruby
+require 'huginn_agent'
+
+Happy # <== now Rails will look at models/happy.rb, thanks Rails
+
+HuginnAgent.hack_huginn_to_accept_me
+HuginnAgent.types.each { |t| t.emit }
+```
+
+However you choose to load this agent, it will be made available as ```HappyAgent``` in your list of available agents.
 
 ![images/01.png](images/01.png)
 
