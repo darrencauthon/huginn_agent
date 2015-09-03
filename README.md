@@ -41,7 +41,7 @@ end
 
 When you inherit from ```HuginnAgent```, your agent will automatically be recognized.  You just have to get it into your web application, somehow. Here are a couple possibilities:
 
-  1) Put your agent in your gem.  Then add a link to your gem in your Huginn app's Gemfile.
+  1) Put your agent in a gem.  Then add a link to the gem in your Huginn app's Gemfile.
   2) Put the agent in your Huginn app. 
 
 *Note: Rails may not load the Ruby file unless it sees some sort of hard reference to the file. (go figure?) If your agent isn't loaded, try referencing it in your initializer: *
