@@ -239,6 +239,14 @@ end
 ![images/11.png](images/11.png)
 
 
+### Interacting with Native Huginn Agent stuff
+
+Your agents built on this gem aren't actually native Huginn Agents.  That's because the Agent base class is in a Rails application, and it won't work outside of that Rails application.
+
+This gem provides you with a base class that will "project" your agent into this Rails environment.  This makes it extendable, but it also means that you're not working with Huginn Agents directly.
+
+But it still works.  Any methods you call from agents written from this gem are routed to the native Huginn code, so you can use the same methods.  ```options```, ```memory```, ```log```, etc.  They all still work.
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/huginn_agent/fork )
