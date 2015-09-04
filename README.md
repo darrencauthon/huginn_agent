@@ -173,6 +173,54 @@ Now whenever the "Smiles" agent fires an agent, the Sadness agent will pick it u
 
 ![images/08.png](images/08.png)
 
+### Everything else
+
+Creating and receiving events are the core features of Huginn. But there are many more, and most are supported by this gem.
+
+Let's start with ```event_description```. Did you notice how the Sad agent reported that "No event_description has been set" for the Happy agent? Let's fix that.
+
+```ruby
+class Happy < HuginnAgent
+
+  # all of that stuff from above ^^^
+
+  def self.event_description
+<<TEXT
+These events always look like:
+
+```
+{ blast: 'A ray of sunshine' }
+```
+TEXT
+  end
+
+end
+```
+
+![images/09.png](images/09.png)
+
+Let's try some others, like managing the agent options.
+
+```ruby
+class Happy < HuginnAgent
+
+  # all of that stuff from above ^^^
+
+  def default_options
+    {
+      important_api_key: ''
+    }
+  end
+
+  def validate_options
+    errors.add :base, 'you must provide the Important API Key' if options['important_api_key'].to_s.strip == ''
+  end
+
+end
+```
+
+![images/10.png](images/10.png)
+
 
 ## Contributing
 
