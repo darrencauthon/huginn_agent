@@ -199,6 +199,7 @@ end
 
 ![images/09.png](images/09.png)
 
+
 Let's try some others, like managing the agent options.
 
 ```ruby
@@ -220,6 +221,22 @@ end
 ```
 
 ![images/10.png](images/10.png)
+
+Huginn allows agents to have a ```working?``` flag, which is helpful when determining if an agent is working as expected.  Your agent will default to true, but you can change that:
+
+```ruby
+class Sad < HuginnAgent
+
+  # the stuff from above ^^^
+
+  def working?
+    false
+  end
+
+end
+```
+
+![images/11.png](images/11.png)
 
 
 ## Contributing
