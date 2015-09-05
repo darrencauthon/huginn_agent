@@ -1,6 +1,7 @@
 # HuginnAgent
 
 [![Build Status](https://travis-ci.org/darrencauthon/huginn_agent.png)](https://travis-ci.org/darrencauthon/huginn_agent)
+[![Code Climate](https://codeclimate.com/github/darrencauthon/huginn_agent/badges/gpa.svg)](https://codeclimate.com/github/darrencauthon/huginn_agent)
 
 A base agent that you can use to create your own Huginn agents.
 
