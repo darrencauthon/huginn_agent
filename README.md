@@ -1,5 +1,7 @@
 # HuginnAgent
 
+[![Build Status](https://travis-ci.org/darrencauthon/huginn_agent.png)](https://travis-ci.org/darrencauthon/huginn_agent)
+
 A base agent that you can use to create your own Huginn agents.
 
 These gems can be in their own separate gem, without any tie to Huginn.
