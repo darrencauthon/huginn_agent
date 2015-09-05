@@ -29,6 +29,11 @@ describe Agent do
       Agent.valid_type?(Struct.new(:constantize).new(nil)).must_equal false
     end
 
+    it "should return false if the type cannot be constantized" do
+      failing_constantize = Object.new.tap { |x| x.stubs(:constantize).raises 'no no' }
+      Agent.valid_type?(failing_constantize).must_equal false
+    end
+
   end
 
 end

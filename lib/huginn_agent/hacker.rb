@@ -15,6 +15,8 @@ class HuginnAgent
 
         def valid_type?(type)
           types.include? type.constantize
+        rescue
+          false
         end
 
       end
